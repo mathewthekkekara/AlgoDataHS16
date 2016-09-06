@@ -8,7 +8,7 @@ import java.util.Random;
 
 /**
  * @author ps
- * Various sort programs for int arrays
+ * Various sort programs for int arrays (exercise) 
  */
 public class SortTest {
 	
