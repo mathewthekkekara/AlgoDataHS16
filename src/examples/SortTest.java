@@ -46,11 +46,11 @@ public class SortTest {
 		int right=med+1;
 		int i=from; // target
 		while(true){
-			// first part allready finished?
+			// first part already finished?
 			if (left>med) 
 				// yes (nothing to do) break
 				break;
-			// second part alschwoblready finished?
+			// second part already finished?
 			else if(right>to){
 				// yes. copy reminder of part1 and then break
 				while(left<=med) b[i++]=a[left++];
