@@ -28,6 +28,27 @@ public class SortTest {
 		return true;
 	}	
 
+	public static void mergeSort(int [] a){
+		mSort(a,0,a.length-1);
+		b = new int[a.length];
+	}
+	
+	
+	
+	private static void mSort(int[] a, int from, int to) {
+		if (from==to) return;
+		int med = (from+to)/2;
+		mSort(a,from,med);
+		mSort(a,med+1,to);
+		merge(a,from,med,to);
+	}
+
+	private static void merge(int[] a, int from, int med, int to) {
+		int left=from;
+		int right=med+1;
+		//....
+	}
+
 	/**
 	 * Non optimized bubble sort for an int array 
 	 * @param a
