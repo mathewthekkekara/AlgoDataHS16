@@ -31,6 +31,7 @@ public class SortTest {
 	public static void mergeSort(int [] a){
 		mSort(a,0,a.length-1);
 		b = new int[a.length];
+		a=b;
 	}
 	
 	
@@ -46,7 +47,18 @@ public class SortTest {
 	private static void merge(int[] a, int from, int med, int to) {
 		int left=from;
 		int right=med+1;
-		//....
+		int i=0;
+		while(left<=med&&right<=to){
+			if(a[left]<a[right]) b[i++] = a[left++];
+			else b[i++]= a[right++];
+		}
+		while(left<=med){
+			b[i++]=a[left++];
+		}
+		while(right<=to){
+			b[i++]=a[right++];
+		}
+
 	}
 
 	/**
@@ -101,7 +113,7 @@ public class SortTest {
 		// get Time
 		te1=System.nanoTime();
 		t1 = threadBean.getCurrentThreadCpuTime();
-		bubbleSort(a);
+		mergeSort(a);
 		te2 = System.nanoTime();
 		t2 = threadBean.getCurrentThreadCpuTime();
 		time=t2-t1;
