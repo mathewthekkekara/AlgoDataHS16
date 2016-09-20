@@ -3,6 +3,7 @@ package examples;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 
@@ -29,12 +30,10 @@ public class SortTest {
 	}	
 
 	public static void mergeSort(int [] a){
-		mSort(a,0,a.length-1);
 		b = new int[a.length];
+		mSort(a,0,a.length-1);
 		a=b;
 	}
-	
-	
 	
 	private static void mSort(int[] a, int from, int to) {
 		if (from==to) return;
@@ -47,7 +46,7 @@ public class SortTest {
 	private static void merge(int[] a, int from, int med, int to) {
 		int left=from;
 		int right=med+1;
-		int i=0;
+		int i= from;
 		while(left<=med&&right<=to){
 			if(a[left]<a[right]) b[i++] = a[left++];
 			else b[i++]= a[right++];
@@ -58,6 +57,7 @@ public class SortTest {
 		while(right<=to){
 			b[i++]=a[right++];
 		}
+		for(int j=i-1;j>=0;j--)a[j]=b[j];
 
 	}
 
@@ -92,7 +92,7 @@ public class SortTest {
 
 	public static void main(String[] args) {
 		long t1=0,t2=0,te1=0,te2=0,eTime=0,time=0;
-		int n = 100000;
+		int n = 1000000;
 		// we need a random generator
 		Random rand=new Random(Integer.MAX_VALUE);
 		//rand.setSeed(54326346); // initialize always in the same state
@@ -113,7 +113,9 @@ public class SortTest {
 		// get Time
 		te1=System.nanoTime();
 		t1 = threadBean.getCurrentThreadCpuTime();
+		//System.out.println("non sorted array"+ Arrays.toString(a));
 		mergeSort(a);
+		//System.out.println("sorted Array"+Arrays.toString(a));
 		te2 = System.nanoTime();
 		t2 = threadBean.getCurrentThreadCpuTime();
 		time=t2-t1;
