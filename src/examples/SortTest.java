@@ -77,7 +77,7 @@ public class SortTest {
 
 	private static int getSmallerChildPos(int[] a, int i){
 		//if there is no right child for that node
-		if(childRightPos(i)>a.length) return childLeftPos(i);
+		if(childRightPos(i)>=a.length) return childLeftPos(i);
 		//compare both children and return the position of the bigger child
 		int SmallerChildPos = (a[childLeftPos(i)]<a[childRightPos(i)]) ? childLeftPos(i) : childRightPos(i);
 		return SmallerChildPos;
@@ -166,7 +166,7 @@ public class SortTest {
 	}
 
 	public static void main(String[] args) {
-		int[] iArr = {2,3,5,6,8,2,9,0,5,};
+		int[] iArr = {2,3,5,6,8,2,9,0,5,6};
 		for (int a: iArr){
 			System.out.print("-["+a+"]-");
 		}
