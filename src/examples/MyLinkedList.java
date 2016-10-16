@@ -5,7 +5,51 @@ import java.lang.management.ThreadMXBean;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-public class MyLinkedList<E> implements List<E> {
+public class MyLinkedList<E> implements List<E>, Iterable<E> {
+	private Position<E> itr;
+
+	@Override
+	public Iterator<Position<E>> positions() {
+		return new Iterator<Position<E>>(){
+			LNode curent = first;
+			@Override
+			public boolean hasNext() {
+				return curent!=null;
+			}
+
+			@Override
+			public Position<E> next() {
+				LNode ret = curent;
+				curent = curent.next;
+				return ret;
+			}
+
+		};
+	}
+
+	@Override
+	public Iterator<E> elements() {
+		return new Iterator<E>(){
+			LNode curent = first;
+			@Override
+			public boolean hasNext() {
+				return curent != null;
+			}
+
+			@Override
+			public E next() {
+				E ret = curent.elem;
+				curent = curent.next;
+				return ret;
+			}};
+	}
+
+	@Override
+	public Iterator<E> iterator() {
+		return elements();
+	}
+
+
 	// auxiliary class for the list positions
 	private class LNode implements Position<E>{
 		E elem;
@@ -92,20 +136,57 @@ public class MyLinkedList<E> implements List<E> {
 
 	@Override
 	public Position<E> insertLast(E o) {
-		// TODO Auto-generated method stub
-		return null;
+		LNode n = new LNode();
+		n.elem = o;
+		n.prev = last;
+		if (last != null) {
+			last.next = n;
+		} else {
+			first = n;
+		}
+		last = n;
+		size++;
+		return n;
 	}
 
 	@Override
 	public Position<E> insertBefore(Position<E> p, E o) {
-		// TODO Auto-generated method stub
-		return null;
+		//The Position
+		LNode pos = checkAndCast(p);
+		//The new Object to input
+		LNode obj = new LNode();
+		obj.elem = o;
+		if(pos.prev==null) return insertFirst(o);
+		//link oLNode with LNode before
+		obj.prev= pos.prev;
+		obj.next = pos;
+
+		//Link pos prev and next with oLNode
+		pos.prev.next=obj;
+		pos.prev = obj;
+		// return the position
+		size++;
+		return obj;
 	}
 
 	@Override
 	public Position<E> insertAfter(Position<E> p, E o) {
-		// TODO Auto-generated method stub
-		return null;
+		//The Position
+		LNode pos = checkAndCast(p);
+		//The new Object to input
+		LNode obj = new LNode();
+		obj.elem = o;
+		if(pos.next==null) return insertLast(o);
+		//link oLNode with LNode before
+		obj.prev= pos;
+		obj.next = pos.next;
+
+		//Link pos prev and next with oLNode
+		pos.next.prev=obj;
+		pos.next = obj;
+		// return the position
+		size++;
+		return obj;
 	}
 
 	@Override
@@ -119,34 +200,49 @@ public class MyLinkedList<E> implements List<E> {
 		size--;
 	}
 
-	@Override
-	public Iterator<Position<E>> positions() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Iterator<E> elements() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public int size() {
 		// TODO Auto-generated method stub
-		return 0;
+		return size;
 	}
 
 	@Override
 	public boolean isEmpty() {
 		// TODO Auto-generated method stub
-		return false;
+		return size==0;
 	}
+
+
 
 	public static void main(String[] args) {
 		List<Integer> ll = new MyLinkedList<>();
+		Position<Integer> p9 = ll.insertFirst(9);
+		Position<Integer> p4 = ll.insertBefore(p9,4);
+		Position<Integer> p14 = ll.insertAfter(p9,14);
+		Position<Integer> p6 = ll.insertBefore(p9,6);
+		Position<Integer> p11 = ll.insertAfter(p9,11);
+		Position<Integer> p10 = ll.insertBefore(p11,10);
+		Position<Integer> p13 = ll.insertBefore(p14,13);
+		Position<Integer> p7 = ll.insertBefore(p6,7);
+		Position<Integer> p3 = ll.insertBefore(p4,3);
+		ll.remove(p9);
+
+
+		//Position p = ll.first();
+		//while (p != null) {
+		//	System.out.println(p.element());
+		//	p=ll.next(p);
+		//}
+		// Iterator version to print the Array list
+		Iterator<Position<Integer>> llit = ll.positions();
+		while(llit.hasNext()) System.out.println(llit.next().element());
+
+		//LinkedList jl = new LinkedList();
+		//Iterator it = jl.iterator();
+		//it.has
 		ThreadMXBean threadBean = ManagementFactory.getThreadMXBean();	
-		final int N=100000; 
+		final int N=10000;
 		Position<Integer>[] pos = new Position[N];
 		Integer [] ints = new Integer[N];
 		long t1,t2,te1,te2;
@@ -164,7 +260,7 @@ public class MyLinkedList<E> implements List<E> {
 		System.out.println(" cpu time:[s] "+1E-9*(t2-t1));
 		t1 = threadBean.getCurrentThreadCpuTime();
 		te1 = System.nanoTime();
-		for (int i=0;i<N;i++) pos[i] = ll.insertFirst(i);
+		for (int i=0;i<N;i++) pos[i] = ll.insertLast(i);
 		for (int i=0;i<N;i++) ll.remove(pos[i]);
 		te2 = System.nanoTime();
 		t2 = threadBean.getCurrentThreadCpuTime();
