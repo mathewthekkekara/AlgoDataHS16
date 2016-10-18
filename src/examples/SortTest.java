@@ -43,79 +43,172 @@ public class SortTest {
 		merge(a,from,med,to);
 	}
 
-	private static int parPos(int i){
-		return (i-1)/2;
-	}
-	private static int childLeftPos(int i){
-		return i*2+1;
-	}
-	private static int childRightPos(int i){
-		return i*2+2;
-	}
+	private static int parPos(int i){return (i-1)/2;}
+	private static int childLeftPos(int i){return i*2+1;}
+	private static int childRightPos(int i){return i*2+2;}
 
-	public static void heapMaxSort(int[] a) {
-		//Heapsort with upheap
-		for (int i = 1; i < a.length; i++) {
-			if (a[parPos(i)] < a[i]) {
-				swap(a, parPos(i), i);
-				upHeap(a, i);
+	/*
+	* the input Array will get sorted
+	* The method for sorting is to get a MaxHeap and swap the first with the last place
+	* and create a maxHeap without the swaped place behind*/
+	public static void arraySort(int[] a){
+		//and Array Sort with downHeap
+		heapMaxSort(a);
+		if(checkMaxHeap(a)){
+			for(int i= a.length-1;i>0;i--){
+				swap(a,0,i);
+				downHeapMax(a,0,i);
 			}
 		}
 	}
 
+	/*
+	* UpHeap Method
+	* HeapMax Sortiert ein als Tree anzusehender Array in einen MaxHeap ( grösster Element am Root)
+	* */
+//	public static void heapMaxSort(int[] a) {
+//		for (int i = 1; i < a.length; i++) {
+//			upHeapMax(a, i);
+//
+//		}
+//	}
+//	/*
+//	* UpHeap Method
+//	* HeapMinSort sortiert ein als Tree anzusehender Array in einen MinHeap ( kleinster Element am Root)
+//	* */
+//	//HeapMax Sortiert ein als Tree anzusehender Array in einen MaxHeap ( grösster Element am Root)
+//	public static void heapMinSort(int[] a) {
+//		for (int i = 1; i < a.length; i++) {
+//			upHeapMin(a, i);
+//		}
+//	}
 
- 	public static void heapMinSort(int[] a){
-	//Heapsort with downHeap
-		for(int i =(a.length/2-1);i>=0;i--){
-			int smallerChildPos = getSmallerChildPos(a,i);
-			if(a[i] > a[smallerChildPos]){
-				swap(a,i,smallerChildPos);
-				downHeap(a,smallerChildPos);
-			}
+	/*
+	* downHeap Method
+	* HeapMax sortiert ein als Tree anzusehender Array in einen MaxHeap (grösster Element am Root)
+	*/
+ 	public static void heapMaxSort(int[] a){
+		for(int i = a.length/2-1;i>=0;i--){
+			downHeapMax(a,i,a.length);
+		}
+	}
+	/*
+	* DownHeap Method
+	* HeapMinSort sortiert ein als Tree anzusehender Array in einen MinHeap ( kleinster Element am Root)
+	* */
+	public static void heapMinSort(int[] a){
+		for(int i = a.length/2-1;i>=0;i--){
+			downHeapMin(a,i,a.length);
 		}
 	}
 
-	private static int getSmallerChildPos(int[] a, int i){
+	/*
+	* @ a: int Array as basic
+	* @ i: The Position
+	* @ len: the endposition of search in Array (to make bounds inside the array)
+	* @ returns: the smaller childPosition of i in the Array a (Array interpretated as Heap)
+	* */
+	private static int getSmallerChildPos(int[] a, int i, int len){
 		//if there is no right child for that node
-		if(childRightPos(i)>=a.length) return childLeftPos(i);
+		if(childRightPos(i)>=len) return childLeftPos(i);
 		//compare both children and return the position of the bigger child
 		int SmallerChildPos = (a[childLeftPos(i)]<a[childRightPos(i)]) ? childLeftPos(i) : childRightPos(i);
 		return SmallerChildPos;
 	}
 
-	private static void upHeap(int[] a, int pos){
-		//assume a[0..pos-1] us a maxHeap
-		//swap a[pos] with its parent until ok
+    /*
+    * @ a: int Array as basic
+    * @ i: The Position
+    * @ len: the endposition of search in Array (to make bounds inside the array)
+    * @ returns: the bigger childPosition of i in the Array a (Array interpretated as Heap)
+    * */
+	private static int getBiggerChildPos(int[] a, int i, int len){
+		//if there is no right child for that node
+		if(childRightPos(i)>=len) return childLeftPos(i);
+		//compare both children and return the position of the bigger child
+		int BiggerChildPos = (a[childLeftPos(i)]>a[childRightPos(i)]) ? childLeftPos(i) : childRightPos(i);
+		return BiggerChildPos;
+	}
+
+    /*
+    * upHeaps the position Value in Array till the parent is bigger
+    * */
+	private static void upHeapMax(int[] a, int pos){
+		// assume a[0..pos-1] us a maxHeap
+		// swap a[pos] with its parent until heap-condition ok
 		while(pos>0){
-			if(a[parPos(pos)]<a[pos]) swap(a,parPos(pos),pos);
+			if(a[parPos(pos)]>a[pos]) break;
+			swap(a,parPos(pos),pos);
 			pos = parPos(pos);
 		}
 	}
 
-	private static void downHeap (int[] a, int pos){
+    /*
+    * upHeaps the position Value in Array till the parent is smaller
+    * */
+	private static void upHeapMin(int[] a, int pos){
+		// assume a[0..pos-1] us a minHeap
+		// swap a[pos] with its parent until heap-condition ok
+		while(pos>0){
+			if(a[parPos(pos)] < a[pos]) break;
+			swap(a,parPos(pos),pos);
+			pos = parPos(pos);
+		}
+	}
+
+    /*
+    * downHeaps the position Value in Array till both children are bigger (maxHeap-> smallest at root)
+    * */
+	private static void downHeapMin (int[] a, int pos,int len){
 		// assume a[0..len] is a maxHeap with exception
 		// of a[pos] which is possible too small.
 		// swap a[pos] with the greater of its children until
 		// heap condition is ok
-		while(pos < a.length/2){
-			int smallerChildPos = getSmallerChildPos(a,pos);
-			if(a[pos] > a[smallerChildPos]){
-				swap(a,pos,smallerChildPos);
-			}
+		while(getSmallerChildPos(a,pos,len) < len){
+			int smallerChildPos = getSmallerChildPos(a,pos,len);
+			if(a[pos] < a[smallerChildPos]) break;
+			swap(a,pos,smallerChildPos);
 			pos=smallerChildPos;
-
 		}
-
 	}
 
+    /*
+    * downHeaps the position Value in Array till both children are smaller (maxHeap->biggest at root)
+    * */
+	private static void downHeapMax (int[] a, int pos,int len){
+		// assume a[0..len] is a maxHeap with exception
+		// of a[pos] which is possible too small.
+		// swap a[pos] with the greater of its children until
+		// heap condition is ok
+		while(getBiggerChildPos(a,pos,len) < len){
+			int biggerChildPos = getBiggerChildPos(a,pos,len);
+			if(a[pos] > a[biggerChildPos]) break;
+			swap(a,pos,biggerChildPos);
+			pos=biggerChildPos;
+		}
+	}
+
+    /*
+    * checks if the given Array is a MaxHeap
+    * */
 	private static boolean checkMaxHeap(int[] a){
 		for(int i=0;i<a.length;i++)	if(a[i]>a[parPos(i)]) return false;
 		return true;
 	}
 
+    /*
+* checks if the given Array is a MinHeap
+* */
 	private static boolean checkMinHeap(int[] a){
 		for(int i=0;i<a.length;i++)	if(a[i]<a[parPos(i)]) return false;
 		return true;
+	}
+
+	private static void printHeap(int[] iArr){
+        for (int a: iArr){
+			System.out.print("-["+a+"]-");
+		}
+		System.out.println("");
 	}
 
 	private static void merge(int[] a, int from, int med, int to) {
@@ -166,24 +259,25 @@ public class SortTest {
 	}
 
 	public static void main(String[] args) {
-		int[] iArr = {2,3,5,6,8,2,9,0,5,6};
-		for (int a: iArr){
-			System.out.print("-["+a+"]-");
-		}
-		System.out.println("");
+		int[] iArr = {2,3,5,6,8,2,9,0,5,6,0,9,4,90,0,23,8,37,6,5,45,9,8};
+        System.out.println("This is the raw Array");
+        printHeap(iArr);
+        //make a max Array
 		heapMaxSort(iArr);
-		for (int a: iArr){
-			System.out.print("-["+a+"]-");
-		}
-		System.out.println("");
-		System.out.println("The Array is Maxsorted: ["+checkMaxHeap(iArr)+"]");
+        System.out.println();
+        System.out.println("This Array is Maxsorted: ["+checkMaxHeap(iArr)+"]");
+		printHeap(iArr);
 
+        //make a min Array
 		heapMinSort(iArr);
-		for (int a: iArr){
-			System.out.print("-["+a+"]-");
-		}
-		System.out.println("");
-		System.out.println("The Array is Minsorted: ["+checkMinHeap(iArr)+"]");
+        System.out.println();
+        System.out.println("This Array is Minsorted: ["+checkMinHeap(iArr)+"]");
+		printHeap(iArr);
+
+		arraySort(iArr);
+        System.out.println();
+        System.out.println("This Array is sorted: ["+sortCheck(iArr)+"]");
+		printHeap(iArr);
 
 //		long t1=0,t2=0,te1=0,te2=0,eTime=0,time=0;
 //		int n = 1000000;
