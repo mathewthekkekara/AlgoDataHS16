@@ -39,10 +39,22 @@ public class MyPriorityQueue<K extends Comparable<? super K>, E> implements
 	@Override
 	public Locator<K, E> insert(K key, E element) {
 		// create new locator
+		PQLoc pq = new PQLoc();
+		pq.key = key;
+		pq.elem = element;
+
 		
 		// put it at heap[++size] 
 		
 		return null;
+	}
+
+	private void upHeap(){
+
+	}
+
+	private void downHeap(){
+
 	}
 
 	@Override

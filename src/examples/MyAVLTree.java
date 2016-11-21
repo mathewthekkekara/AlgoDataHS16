@@ -56,9 +56,28 @@ public class MyAVLTree<K extends Comparable<? super K>, E> implements
 
 	@Override
 	public Locator<K, E> find(K key) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		AVLNode found = null;
+		AVLNode act = root;
+		while(! act.isExternal()){
+			int comp = act.key.compareTo(key);
+			if(comp<0) act = act.right;
+			else if(comp>0) act = act.left;
+			else{
+				found = act;
+				act = act.left;
+				}
+			}
+		return found;
+		}
+
+
+//	public MyLinkedList<AVLNode> recFound(K key, AVLNode act){
+//		if(act == key){
+//			if(!act.left.isExternal())
+//		}
+//	MyLinkedList<AVLNode> found = new MyLinkedList();
+//	}
+
 
 	@Override
 	public Locator<K, E>[] findAll(K key) {
@@ -119,20 +138,21 @@ public class MyAVLTree<K extends Comparable<? super K>, E> implements
 		//find out if the branch to correct is stright or curved
 
 		if(second.isLeftChild() && third.isLeftChild()) branch = "Ls"; // straight to Left
-		if (second.isRightChild()&& third.isRightChild()) branch = "Rs"; // straight to Right
-		if (second.isLeftChild()&& third.isRightChild()) branch = "Rc"; // curved to Right
-		else branch = "Rs"; //curved to Left
+		else if (second.isRightChild()&& third.isRightChild()) branch = "Rs"; // straight to Right
+		else if (second.isLeftChild()&& third.isRightChild()) branch = "Lc"; // curved to Right
+		else branch = "Rc"; //curved to Left
 
 		//define the children Subtituions
+		//jede variante testen
 		switch(branch){
 			case  "Ls":
 				x = second;
-				y = first;
-				z = third;
-				a = z.left;
-				b = z.right;
-				c = y.right;
-				d = x.right;
+				y = third;
+				z = first;
+				a = third.left;
+				b = third.right;
+				c = second.right;
+				d = first.right;
 				break;
 			case  "Rs":
 				x = second;
@@ -145,21 +165,22 @@ public class MyAVLTree<K extends Comparable<? super K>, E> implements
 				break;
 			case  "Lc":
 				x = third;
-				y = first;
-				z= second;
-				a = y.left;
-				b = z.left;
-				c = z.right;
-				d = x.right;
-				break;
-			case  "Rc":
-				x = third;
 				y = second;
 				z= first;
-				a = x.left;
-				b = z.left;
-				c = z.right;
-				d = x.right;
+				a = second.left;
+				b = third.left;
+				c = third.right;
+				d = first.right;
+				break;
+			case  "Rc":
+
+				x = third;
+				y = first;
+				z= second;
+				a = first.left;
+				b = third.left;
+				c = third.right;
+				d = second.right;
 				break;
 		}
 		modify(parent,leftChild,x,y,z,a,b,c,d);
@@ -197,16 +218,15 @@ public class MyAVLTree<K extends Comparable<? super K>, E> implements
 		increaseHeight(d);
 
 	}
+	//returns the child with the greater hight
 	public AVLNode getElderChild(AVLNode node){
-		if(node.isLeftChild()) return (node.left.height < node.right.height) ? node.right : node.left;
-		else return (node.left.height <= node.right.height) ? node.right : node.left;
+		if(node.isLeftChild()) return (node.left.height >= node.right.height) ? node.left : node.right;
+		else return (node.right.height >= node.left.height) ? node.right : node.left;
 	}
 
 	@Override
 	public void remove(Locator<K, E> loc) {
-
-		// TODO Auto-generated method stub
-
+		//AVLNode node = loc;
 	}
 
 	@Override
@@ -270,7 +290,7 @@ public class MyAVLTree<K extends Comparable<? super K>, E> implements
 		else inN = in+"-"; // root of the tree
 		if ( ! r.right.isExternal()) System.out.println(inNeu+" |");
 		else System.out.println(inNeu);
-		System.out.println(inN+r.key()+"["+r.height+"]");//+"(h="+r.height+")"+":"+r.elem+")");
+		System.out.println(inN+r.key()+"["+r.height+"]<"+r.element()+">");//+"(h="+r.height+")"+":"+r.elem+")");
 		// left subtree
 		inNeu = in;
 		if (r.isLeftChild()){
@@ -287,19 +307,28 @@ public class MyAVLTree<K extends Comparable<? super K>, E> implements
 
 	public static void main(String[] args) {
 		MyAVLTree<Integer,String> myTree = new MyAVLTree();
-		myTree.insert(1,"");
-		myTree.insert(2,"");
-		myTree.insert(3,"");
-		myTree.insert(4,"");
-		myTree.insert(5,"");
-		myTree.insert(6,"");
-		myTree.insert(6,"");
-		myTree.insert(8,"");
-		myTree.insert(9,"");
-		myTree.insert(20,"");
-		myTree.insert(2,"");
-		myTree.insert(21,"");
+		myTree.insert(1,"a");
+		myTree.insert(8,"ddd");
+		myTree.insert(2,"b");
+		myTree.insert(2,"ss");
+		myTree.insert(2,"ss");
+		myTree.insert(2,"hhh");
+		myTree.insert(3,"c");
+		myTree.insert(4,"d");
+		myTree.insert(5,"e");
+		myTree.insert(7,"f");
+		myTree.insert(8,"f");
+		myTree.insert(12,"f");
+		myTree.insert(11,"f");
+		myTree.insert(9,"f");
+		for(int i =100;i>0;i--){
+			myTree.insert(i,"auto"+i);
+		}
+
 		myTree.printKeys();
+		System.out.println("The Height is: ["+myTree.root.height+"]");
+		Locator n = myTree.find(100);
+		System.out.println(n.element()+" & "+ n.key());
 
 	}
 
