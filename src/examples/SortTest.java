@@ -259,25 +259,25 @@ public class SortTest {
 	}
 
 	public static void main(String[] args) {
-		int[] iArr = {2,3,5,6,8,2,9,0,5,6,0,9,4,90,0,23,8,37,6,5,45,9,8};
-        System.out.println("This is the raw Array");
-        printHeap(iArr);
-        //make a max Array
-		heapMaxSort(iArr);
-        System.out.println();
-        System.out.println("This Array is Maxsorted: ["+checkMaxHeap(iArr)+"]");
-		printHeap(iArr);
-
-        //make a min Array
-		heapMinSort(iArr);
-        System.out.println();
-        System.out.println("This Array is Minsorted: ["+checkMinHeap(iArr)+"]");
-		printHeap(iArr);
-
-		arraySort(iArr);
-        System.out.println();
-        System.out.println("This Array is sorted: ["+sortCheck(iArr)+"]");
-		printHeap(iArr);
+//		int[] iArr = {2,3,5,6,8,2,9,0,5,6,0,9,4,90,0,23,8,37,6,5,45,9,8};
+//        System.out.println("This is the raw Array");
+//        printHeap(iArr);
+//        //make a max Array
+//		heapMaxSort(iArr);
+//        System.out.println();
+//        System.out.println("This Array is Maxsorted: ["+checkMaxHeap(iArr)+"]");
+//		printHeap(iArr);
+//
+//        //make a min Array
+//		heapMinSort(iArr);
+//        System.out.println();
+//        System.out.println("This Array is Minsorted: ["+checkMinHeap(iArr)+"]");
+//		printHeap(iArr);
+//
+//		arraySort(iArr);
+//        System.out.println();
+//        System.out.println("This Array is sorted: ["+sortCheck(iArr)+"]");
+//		printHeap(iArr);
 
 //		long t1=0,t2=0,te1=0,te2=0,eTime=0,time=0;
 //		int n = 1000000;
